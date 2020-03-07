@@ -73,12 +73,12 @@ def align_sc_tr(mtx1, mtx2):
 
     predCurr = mtx2.copy()
     # normalize the predictions
-    s = np.sqrt(np.sum(np.square(predCurr[9] - predCurr[0])))
+    s = np.sqrt(np.sum(np.square(predCurr[4] - predCurr[0])))
     if s>0:
         predCurr = predCurr / s
 
     # get the scale of the ground truth
-    sGT = np.sqrt(np.sum(np.square(mtx1[9] - mtx1[0])))
+    sGT = np.sqrt(np.sum(np.square(mtx1[4] - mtx1[0])))
 
     # make predictions scale same as ground truth scale
     predCurr = predCurr * sGT
