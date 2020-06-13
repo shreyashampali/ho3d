@@ -92,7 +92,7 @@ not redistribute, modificate, or commercial usage of this dataset in any way or 
 If using this dataset, please cite the corresponding paper.
 
     
-	@ARTICLE{hampali2019honnotate,
+	@INPROCEEDINGS{hampali2020honnotate,
     	      title={HOnnotate: A method for 3D Annotation of Hand and Object Poses},
               author={Shreyas Hampali and Mahdi Rad and Markus Oberweger and Vincent Lepetit},
               booktitle = {CVPR},
