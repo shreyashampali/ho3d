@@ -219,6 +219,7 @@ def main(gt_path, pred_path, output_dir, version, pred_file_name=None, set_name=
     assert len(pred) == 2, 'Expected format mismatch.'
     assert len(pred[0]) == len(xyz_list), 'Expected format mismatch.'
     assert len(pred[1]) == len(xyz_list), 'Expected format mismatch.'
+    assert len(pred[0]) == db_size(set_name, version=version)
 
     # init eval utils
     eval_xyz, eval_xyz_procrustes_aligned, eval_xyz_sc_tr_aligned = EvalUtil(), EvalUtil(), EvalUtil()
@@ -230,13 +231,13 @@ def main(gt_path, pred_path, output_dir, version, pred_file_name=None, set_name=
 
     try:
         from tqdm import tqdm
-        rng = tqdm(range(db_size(set_name)))
+        rng = tqdm(range(db_size(set_name, version)))
     except:
-        rng = range(db_size(set_name))
+        rng = range(db_size(set_name,version))
 
     # iterate over the dataset once
     for idx in rng:
-        if idx >= db_size(set_name):
+        if idx >= db_size(set_name,version):
             break
 
         xyz, verts = xyz_list[idx], verts_list[idx]
@@ -324,11 +325,11 @@ def main(gt_path, pred_path, output_dir, version, pred_file_name=None, set_name=
     if shape_is_mano:
         mesh_mean3d, _, mesh_auc3d, pck_mesh, thresh_mesh = eval_mesh_err.get_measures(0.0, 0.05, 100)
         print('Evaluation 3D MESH results:')
-        print('auc=%.3f, mean_kp3d_avg=%.2f cm' % (mesh_auc3d, mesh_mean3d * 100.0))
+        print('auc=%.3f, mean_vert3d_avg=%.2f cm' % (mesh_auc3d, mesh_mean3d * 100.0))
 
         mesh_al_mean3d, _, mesh_al_auc3d, pck_mesh_al, thresh_mesh_al = eval_mesh_err_aligned.get_measures(0.0, 0.05, 100)
         print('Evaluation 3D MESH ALIGNED results:')
-        print('auc=%.3f, mean_kp3d_avg=%.2f cm\n' % (mesh_al_auc3d, mesh_al_mean3d * 100.0))
+        print('auc=%.3f, mean_vert3d_avg=%.2f cm\n' % (mesh_al_auc3d, mesh_al_mean3d * 100.0))
     else:
         mesh_mean3d, mesh_auc3d, mesh_al_mean3d, mesh_al_auc3d = -1.0, -1.0, -1.0, -1.0
 
