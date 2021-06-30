@@ -73,12 +73,12 @@ def align_sc_tr(mtx1, mtx2):
 
     predCurr = mtx2.copy()
     # normalize the predictions
-    s = np.sqrt(np.sum(np.square(predCurr[9] - predCurr[0])))
+    s = np.sqrt(np.sum(np.square(predCurr[4] - predCurr[0])))
     if s>0:
         predCurr = predCurr / s
 
     # get the scale of the ground truth
-    sGT = np.sqrt(np.sum(np.square(mtx1[9] - mtx1[0])))
+    sGT = np.sqrt(np.sum(np.square(mtx1[4] - mtx1[0])))
 
     # make predictions scale same as ground truth scale
     predCurr = predCurr * sGT
@@ -344,7 +344,7 @@ def main(gt_path, pred_path, output_dir, pred_file_name=None, set_name=None):
         f_out.append('f_al_score_%d: %f' % (round(t*1000), fa.mean()))
 
     # Dump results
-    score_path = os.path.join(output_dir, 'scores.txt')
+    score_path = os.path.join(output_dir, 'scores_21_845.txt')
     with open(score_path, 'w') as fo:
         xyz_mean3d *= 100
         xyz_procrustes_al_mean3d *= 100

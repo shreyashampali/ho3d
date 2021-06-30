@@ -249,6 +249,58 @@ def plot3dVisualize(ax, m, flip_x=False, c="b", alpha=0.1, camPose=np.eye(4, dty
 class Minimal(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
+        
+
+
+class Open3DWin():
+    def __init__(self):
+        import open3d
+        self.vis = open3d.visualization.Visualizer()
+        self.vis.create_window(window_name='Open3D', width=640, height=480, left=0, top=0,
+                          visible=True)  # use visible=True to visualize the point cloud
+        # vis.get_render_option().light_on = False
+        self.vis.get_render_option().mesh_show_back_face = True
+        
+    def capture_view(self, mesh, view_mat_path=None,intrinsics=None):
+        
+        if not isinstance(view_mat_path, np.ndarray) and view_mat_path is not None:
+            assert os.path.exists(view_mat_path)
+            view_mat = np.loadtxt(view_mat_path)
+        else:
+            view_mat = view_mat_path
+    
+        camera_param = self.vis.get_view_control().convert_to_pinhole_camera_parameters()
+        cx = camera_param.intrinsic.intrinsic_matrix[0, 2]
+        cy = camera_param.intrinsic.intrinsic_matrix[1, 2]
+    
+        if intrinsics is not None:
+            camera_param.intrinsic.set_intrinsics(camera_param.intrinsic.width, camera_param.intrinsic.height,
+                                                  intrinsics[0, 0], intrinsics[1, 1], cx, cy)
+    
+        if view_mat is not None:
+            camera_param = self.vis.get_view_control().convert_to_pinhole_camera_parameters()
+            camera_param.extrinsic = view_mat
+    
+        ctr = self.vis.get_view_control()
+        # ctr.set_constant_z_far(20.)
+        # ctr.set_constant_z_near(-2)
+        for m in mesh:
+            self.vis.add_geometry(m)
+    
+        ctr.convert_from_pinhole_camera_parameters(camera_param)
+    
+    
+    
+        # vis.run()
+    
+        render = self.vis.capture_screen_float_buffer(do_render=True)
+    
+        render = (np.asarray(render)*255).astype(np.uint8)
+
+        for m in mesh:
+            self.vis.remove_geometry(m)
+    
+        return render
 
 def open3dVisualize(mList, colorList):
     import open3d
@@ -269,6 +321,9 @@ def open3dVisualize(mList, colorList):
             mesh.vertex_colors = open3d.utility.Vector3dVector(np.tile(np.array([[0.6, 0.2, 0.2]]), [numVert, 1]))
         elif colorList[i] == 'g':
             mesh.vertex_colors = open3d.utility.Vector3dVector(np.tile(np.array([[0.5, 0.5, 0.5]]), [numVert, 1]))
+        elif isinstance(colorList[i],np.ndarray):
+            assert colorList[i].shape == np.array(mesh.vertices).shape
+            mesh.vertex_colors = open3d.utility.Vector3dVector(colorList[i])
         else:
             raise Exception('Unknown mesh color')
 
@@ -323,19 +378,29 @@ def read_obj(filename):
     return result
 
 
-def db_size(set_name):
+def db_size(set_name, version='v2'):
     """ Hardcoded size of the datasets. """
     if set_name == 'training':
-        return 66034  # number of unique samples (they exists in multiple 'versions')
+        if version == 'v2':
+            return 66034  # number of unique samples (they exists in multiple 'versions')
+        elif version == 'v3':
+            return 78297
+        else:
+            raise NotImplementedError
     elif set_name == 'evaluation':
-        return 11524
+        if version == 'v2':
+            return 11524
+        elif version == 'v3':
+            return 20137
+        else:
+            raise NotImplementedError
     else:
         assert 0, 'Invalid choice.'
 
 def load_pickle_data(f_name):
     """ Loads the pickle data """
     if not os.path.exists(f_name):
-        raise Exception('Unable to find annotations picle file at %s. Aborting.'%fName)
+        raise Exception('Unable to find annotations picle file at %s. Aborting.'%(f_name))
     with open(f_name, 'rb') as f:
         try:
             pickle_data = pickle.load(f, encoding='latin1')

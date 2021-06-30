@@ -6,6 +6,8 @@ import pip
 import argparse
 from utils.vis_utils import *
 import random
+from copy import deepcopy
+import open3d
 
 def install(package):
     if hasattr(pip, 'main'):
@@ -25,6 +27,7 @@ try:
 except:
     install('chumpy')
     import chumpy as ch
+
 
 try:
     import pickle
@@ -85,7 +88,7 @@ if __name__ == '__main__':
     ap.add_argument("-id", required=False, type=str,
                     help="image ID")
     ap.add_argument("-visType", required=False,
-                    help="Type of visualization", choices=['open3d', 'matplotlib'], default='matplotlib')
+                    help="Type of visualization", choices=['open3d', 'matplotlib'], default='open3d')
     args = vars(ap.parse_args())
 
     baseDir = args['ho3d_path']
@@ -104,6 +107,9 @@ if __name__ == '__main__':
     else:
         pass
 
+    if args['visType'] == 'matplotlib':
+        o3dWin = Open3DWin()
+
 
     while(True):
         seqName = args['seq']
@@ -113,6 +119,15 @@ if __name__ == '__main__':
         img = read_RGB_img(baseDir, seqName, id, split)
         depth = read_depth_img(baseDir, seqName, id, split)
         anno = read_annotation(baseDir, seqName, id, split)
+
+        if anno['objRot'] is None:
+            print('Frame %s in sequence %s does not have annotations'%(args['id'], args['seq']))
+            if not runLoop:
+                break
+            else:
+                args['seq'] = random.choice(os.listdir(join(baseDir, split)))
+                args['id'] = random.choice(os.listdir(join(baseDir, split, args['seq'], 'rgb'))).split('.')[0]
+                continue
 
         # get object 3D corner locations for the current pose
         objCorners = anno['objCorners3DRest']
@@ -129,6 +144,20 @@ if __name__ == '__main__':
             # Only root joint available in evaluation split
             handKps = project_3D_points(anno['camMat'], np.expand_dims(anno['handJoints3D'],0), is_OpenGL_coords=True)
         objKps = project_3D_points(anno['camMat'], objCornersTrans, is_OpenGL_coords=True)
+
+        # visualize the hand contact map
+        if 'handVertContact' in anno.keys() and args['visType'] == 'matplotlib':
+            contactMesh = deepcopy(handMesh)
+            contactMesh.fullpose[:] = contactMesh.fullpose.r * 0
+            contactMesh.trans[:] = np.array([0., 0., 1.0])
+            contactCols = np.zeros((contactMesh.r.shape[0], 3))
+            contactCols[:, 2] = anno['handVertContact']
+            contactMeshO3d = open3d.geometry.TriangleMesh()
+            contactMeshO3d.vertices = open3d.utility.Vector3dVector(np.copy(contactMesh.r))
+            contactMeshO3d.triangles = open3d.utility.Vector3iVector(contactMesh.f)
+            contactMeshO3d.vertex_colors = open3d.utility.Vector3dVector(contactCols)
+
+            contactMapHand = o3dWin.capture_view([contactMeshO3d], 'utils/hand_r.txt')
 
         # Visualize
         if args['visType'] == 'open3d':
@@ -149,6 +178,8 @@ if __name__ == '__main__':
             else:
                 open3dVisualize([objMesh], ['r', 'g'])
 
+
+
         elif args['visType'] == 'matplotlib':
 
             # draw 2D projections of annotations on RGB image
@@ -162,30 +193,36 @@ if __name__ == '__main__':
             imgAnno = showObjJoints(imgAnno, objKps, lineThickness=2)
 
             # create matplotlib window
-            fig = plt.figure(figsize=(2, 2))
+            fig = plt.figure(figsize=(2, 3))
             figManager = plt.get_current_fig_manager()
             figManager.resize(*figManager.window.maxsize())
 
             # show RGB image
-            ax0 = fig.add_subplot(2, 2, 1)
+            ax0 = fig.add_subplot(2, 3, 1)
             ax0.imshow(img[:, :, [2, 1, 0]])
             ax0.title.set_text('RGB Image')
 
             # show depth map
-            ax1 = fig.add_subplot(2, 2, 2)
-            ax1.imshow(depth)
+            ax1 = fig.add_subplot(2, 3, 2)
+            im = ax1.imshow(depth)
             ax1.title.set_text('Depth Map')
 
+            # show contact map
+            if 'handVertContact' in anno.keys():
+                ax3 = fig.add_subplot(2, 3, 3)
+                im = ax3.imshow(contactMapHand)
+                ax3.title.set_text('Contact Map')
+
             # show 3D hand mesh
-            ax2 = fig.add_subplot(2, 2, 3, projection="3d")
+            ax3 = fig.add_subplot(2, 3, 4, projection="3d")
             if split=='train':
-                plot3dVisualize(ax2, handMesh, flip_x=False, isOpenGLCoords=True, c="r")
-            ax2.title.set_text('Hand Mesh')
+                plot3dVisualize(ax3, handMesh, flip_x=False, isOpenGLCoords=True, c="r")
+            ax3.title.set_text('Hand Mesh')
 
             # show 2D projections of annotations on RGB image
-            ax3 = fig.add_subplot(2, 2, 4)
-            ax3.imshow(imgAnno[:, :, [2, 1, 0]])
-            ax3.title.set_text('3D Annotations projected to 2D')
+            ax4 = fig.add_subplot(2, 3, 5)
+            ax4.imshow(imgAnno[:, :, [2, 1, 0]])
+            ax4.title.set_text('3D Annotations projected to 2D')
 
             plt.show()
         else:

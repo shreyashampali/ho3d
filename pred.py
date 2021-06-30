@@ -5,7 +5,7 @@ from tqdm import tqdm
 from utils.vis_utils import *
 
 
-def main(base_path, pred_out_path, pred_func, set_name=None):
+def main(base_path, pred_out_path, pred_func, version, set_name=None):
     """
         Main eval loop: Iterates over all evaluation samples and saves the corresponding predictions.
     """
@@ -21,11 +21,11 @@ def main(base_path, pred_out_path, pred_func, set_name=None):
         file_list = f.readlines()
     file_list = [f.strip() for f in file_list]
 
-    assert len(file_list) == db_size(set_name), '%s.txt is not accurate. Aborting'%set_name
+    assert len(file_list) == db_size(set_name, version), '%s.txt is not accurate. Aborting'%set_name
 
     # iterate over the dataset once
-    for idx in tqdm(range(db_size(set_name))):
-        if idx >= db_size(set_name):
+    for idx in tqdm(range(db_size(set_name, version))):
+        if idx >= db_size(set_name, version):
             break
 
         seq_name = file_list[idx].split('/')[0]
@@ -85,6 +85,8 @@ if __name__ == '__main__':
                         help='Path to where the HO3D dataset is located.')
     parser.add_argument('--out', type=str, default='pred.json',
                         help='File to save the predictions.')
+    parser.add_argument('--version', type=str,
+                        help='File to save the predictions.')
     args = parser.parse_args()
 
     # call with a predictor function
@@ -92,6 +94,7 @@ if __name__ == '__main__':
         args.base_path,
         args.out,
         pred_func=pred_template,
-        set_name='evaluation'
+        set_name='evaluation',
+        version=args.version
     )
 
