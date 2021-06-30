@@ -200,7 +200,7 @@ def _search_pred_file(pred_path, pred_file_name):
         raise Exception('Giving up, because its not clear which file to evaluate.')
 
 
-def main(gt_path, pred_path, output_dir, pred_file_name=None, set_name=None):
+def main(gt_path, pred_path, output_dir, version, pred_file_name=None, set_name=None):
     if pred_file_name is None:
         pred_file_name = 'pred.json'
     if set_name is None:
@@ -344,7 +344,7 @@ def main(gt_path, pred_path, output_dir, pred_file_name=None, set_name=None):
         f_out.append('f_al_score_%d: %f' % (round(t*1000), fa.mean()))
 
     # Dump results
-    score_path = os.path.join(output_dir, 'scores_21_845.txt')
+    score_path = os.path.join(output_dir, 'scores.txt')
     with open(score_path, 'w') as fo:
         xyz_mean3d *= 100
         xyz_procrustes_al_mean3d *= 100
@@ -389,13 +389,16 @@ if __name__ == '__main__':
                         help='Path to where the eval result should be.')
     parser.add_argument('--pred_file_name', type=str, default='pred.json',
                         help='Name of the eval file.')
+    parser.add_argument('--version', type=str,
+                        help='HO3D version', default='v2')
     args = parser.parse_args()
 
     # call eval
     main(
-        os.path.join(args.input_dir, 'ref'),
-        os.path.join(args.input_dir, 'res'),
-        args.output_dir,
-        args.pred_file_name,
-        set_name='evaluation'
+        gt_path=os.path.join(args.input_dir, 'ref'),
+        pred_path=os.path.join(args.input_dir, 'res'),
+        output_dir=args.output_dir,
+        pred_file_name=args.pred_file_name,
+        set_name='evaluation',
+        version=args.version
     )
