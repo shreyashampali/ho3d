@@ -62,7 +62,7 @@ def _patch_mano_loader():
                            (27, 'from mano.webuser.posemapper import posemap'),
                            (38, '        from mano.webuser.posemapper import Rodrigues'),
                            (77, '    v = v[:,:3]'),
-                           (78, '    for tp in [745, 320, 444, 555, 657]:  # THUMB, INDEX, MIDDLE, RING, PINKY'),
+                           (78, '    for tp in [728, 353, 442, 576, 694]:  # THUMB, INDEX, MIDDLE, RING, PINKY'),
                            (79, '        A_global.append(xp.vstack((xp.hstack((np.zeros((3, 3)), v[tp, :3].reshape((3, 1)))), xp.array([[0.0, 0.0, 0.0, 1.0]]))))')
                        ]
                        ))

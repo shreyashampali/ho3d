@@ -7,7 +7,7 @@ persons manipulating different objects, which are taken from [YCB dataset](https
 proposed annotation method can be found in our [paper](https://arxiv.org/pdf/1907.01481). The dataset contains 77558 annotated images and their 
 corresponding depth maps.
 
-For more details about the dataset and the corresponding work, visit our [project page](https://www.tugraz.at/institutes/icg/research/team-lepetit/research-projects/)
+For more details about the dataset and the corresponding work, visit our [project page](https://www.tugraz.at/index.php?id=40231)
 
 An online codalab challenge which provides a platform to evaluate different hand pose estimation methods on our dataset with standard metrics is launched 
 [here](https://competitions.codalab.org/competitions/22485?secret_key=756c1c8c-84ec-47ec-aa17-42f1fa330fb4) 
@@ -23,7 +23,7 @@ This repository contains a collection of scripts for:
     ```
     conda create -n python2.7 python=2.7
     source activate python2.7
-    pip install numpy matplotlib scikit-image transforms3d tqdm opencv-python cython pickle
+    pip install numpy matplotlib scikit-image transforms3d tqdm opencv-python cython open3d
     ```
 2. Download Models&code from the MANO website
     ```
@@ -92,13 +92,11 @@ not redistribute, modificate, or commercial usage of this dataset in any way or 
 If using this dataset, please cite the corresponding paper.
 
     
-	@ARTICLE{hampali2019honnotate,
-    	      title={HOnnotate: A method for 3D Annotation of Hand and Objects Poses},
+	@INPROCEEDINGS{hampali2020honnotate,
+    	      title={HOnnotate: A method for 3D Annotation of Hand and Object Poses},
               author={Shreyas Hampali and Mahdi Rad and Markus Oberweger and Vincent Lepetit},
-              year={2019},
-              eprint={1907.01481},
-              archivePrefix={arXiv},
-              primaryClass={cs.CV}
+              booktitle = {CVPR},
+	      year = {2020}
              }
     
 # Acknowledgments
