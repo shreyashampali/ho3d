@@ -23,7 +23,7 @@ corresponding depth maps.
 For more details about the dataset and the corresponding work, visit our [project page](https://www.tugraz.at/index.php?id=40231)
 
 An online codalab challenge which provides a platform to evaluate different hand pose estimation methods on our dataset with standard metrics is launched 
-[here](https://competitions.codalab.org/competitions/22485?secret_key=756c1c8c-84ec-47ec-aa17-42f1fa330fb4) 
+[here](https://competitions.codalab.org/competitions/22485) (for version 2) and [here](https://competitions.codalab.org/competitions/33267) (for version 3)
 
 This repository contains a collection of scripts for:
 * Visualization of HO-3D dataset
