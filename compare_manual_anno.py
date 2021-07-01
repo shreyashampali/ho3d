@@ -14,7 +14,7 @@ def calculateMSEPerFrame(manualAnno, annotFile):
     seq = annotFile.split('_')[0]
     fID = annotFile.split('_')[1]
 
-    optDir = (os.path.join(args.base_path, seq+'1',
+    optDir = (os.path.join(args.base_path, 'train', seq+'1',
                            'meta',
                            fID + '.pkl'))
 

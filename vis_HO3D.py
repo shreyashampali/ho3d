@@ -88,7 +88,7 @@ if __name__ == '__main__':
     ap.add_argument("-id", required=False, type=str,
                     help="image ID")
     ap.add_argument("-visType", required=False,
-                    help="Type of visualization", choices=['open3d', 'matplotlib'], default='open3d')
+                    help="Type of visualization", choices=['open3d', 'matplotlib'], default='matplotlib')
     args = vars(ap.parse_args())
 
     baseDir = args['ho3d_path']
@@ -146,7 +146,7 @@ if __name__ == '__main__':
         objKps = project_3D_points(anno['camMat'], objCornersTrans, is_OpenGL_coords=True)
 
         # visualize the hand contact map
-        if 'handVertContact' in anno.keys() and args['visType'] == 'matplotlib':
+        if 'handVertContact' in anno.keys() and args['visType'] == 'matplotlib' and split == 'train':
             contactMesh = deepcopy(handMesh)
             contactMesh.fullpose[:] = contactMesh.fullpose.r * 0
             contactMesh.trans[:] = np.array([0., 0., 1.0])

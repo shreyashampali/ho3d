@@ -433,7 +433,10 @@ def project_3D_points(cam_mat, pts3D, is_OpenGL_coords=True):
 
 def read_RGB_img(base_dir, seq_name, file_id, split):
     """Read the RGB image in dataset"""
-    img_filename = os.path.join(base_dir, split, seq_name, 'rgb', file_id + '.png')
+    if os.path.exists(os.path.join(base_dir, split, seq_name, 'rgb', file_id + '.png')):
+        img_filename = os.path.join(base_dir, split, seq_name, 'rgb', file_id + '.png')
+    else:
+        img_filename = os.path.join(base_dir, split, seq_name, 'rgb', file_id + '.jpg')
 
     _assert_exist(img_filename)
 

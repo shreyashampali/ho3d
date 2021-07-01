@@ -25,7 +25,9 @@ multiCamSeqs = [
     'SB1',
     'ShSu1',
     'SiBF1',
-    'SMu4'
+    'SMu4',
+    'MPM1',
+    'AP1'
 ]
 
 
@@ -67,11 +69,11 @@ def read_depth_img(depth_filename):
     return dpt
 
 
-def load_point_clouds(seq, fID):
+def load_point_clouds(seq, fID, setDir):
     pcds = []
 
-    seqDir = os.path.join(args.base_path, seq)
-    calibDir = os.path.join(args.base_path, '../', 'calibration', seq, 'calibration')
+    seqDir = os.path.join(setDir, seq)
+    calibDir = os.path.join(setDir, '../', 'calibration', seq, 'calibration')
     cams_order = np.loadtxt(join(calibDir, 'cam_orders.txt')).astype('uint8').tolist()
     depth_scale = 1. / np.loadtxt(join(calibDir, 'cam_0_depth_scale.txt'))
     Ts = []
@@ -82,10 +84,12 @@ def load_point_clouds(seq, fID):
     for i in range(len(cams_order)):
         path_color = join(seqDir+str(cams_order[i]), 'rgb', fID + '.png')
         if not os.path.exists(path_color):
+            path_color = join(seqDir + str(cams_order[i]), 'rgb', fID + '.jpg')
+        if not os.path.exists(path_color):
             continue
 
         color_raw = o3d.io.read_image(path_color)#o3d.geometry.Image(color_raw.astype(np.float32))
-        depth_raw = read_depth_img(path_color.replace('rgb', 'depth'))
+        depth_raw = read_depth_img(path_color.replace('rgb', 'depth').replace('jpg', 'png'))
 
         depth_raw = o3d.geometry.Image(depth_raw.astype(np.float32))
         K = get_intrinsics(join(calibDir, 'cam_{}_intrinsics.txt'.format(i))).tolist()
@@ -119,29 +123,29 @@ def combine_point_clouds(pcds):
 
 def manual_registration(annoFiles):
     if args.seq is not None:
+        if args.seq not in multiCamSeqs:
+            print('[ERROR] Sequence should be one of the following: ', multiCamSeqs)
+            return
         annoFiles = [args.seq]
+
     for idx, annoFile in enumerate(annoFiles):
 
         seq = annoFile
-        if not os.path.exists(os.path.join(args.base_path,seq+'0','rgb')):
-            print('Sequence %s not in %s. Check if path to \'train\' or \'eval\' folder is correct.' % (
-            annoFile, args.base_path))
-            return
 
-        files = os.listdir(os.path.join(args.base_path,seq+'0','rgb'))
+        setDir = os.path.join(args.base_path, 'train')
+        if not os.path.exists(os.path.join(setDir, seq+'0','rgb')):
+            setDir =  os.path.join(args.base_path, 'evaluation')
+
+        files = os.listdir(os.path.join(setDir,seq+'0','rgb'))
         files = [f[:-4] for f in files]
         if args.fid is not None:
             files = [args.fid]
         for fID in files[:]:
-            pcds = load_point_clouds(seq, fID)
+            pcds = load_point_clouds(seq, fID, setDir)
             pcd = combine_point_clouds(pcds)
 
-            if len(pcds) == 0:
-                print('Sequence %s not in %s. Check if path to \'train\' or \'eval\' folder is correct.'%(annoFile, args.base_path) )
-                return
-
             # o3d.visualization.draw_geometries([pcd])
-            vis = o3d.visualization.VisualizerWithEditing()
+            vis = o3d.visualization.Visualizer()
             vis.create_window()
             vis.add_geometry(pcd)
             vis.run()
@@ -153,9 +157,9 @@ def manual_registration(annoFiles):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Show some samples from the dataset.')
-    parser.add_argument('--base_path', type=str,
+    parser.add_argument('base_path', type=str,
                         help='Path to where the HO3D dataset is located.')
-    parser.add_argument('--seq', type=str,
+    parser.add_argument('--seq', type=str, choices=['ABF1','BB1','GPMF1','GSF1','MDF1','SB1','ShSu1', 'SiBF1','SMu4', 'MPM1', 'AP1'],
                         help='Sequence name.', required=False)
     parser.add_argument('--fid', type=str,
                         help='File ID', required=False)

@@ -133,6 +133,7 @@ pred_for_reference.py
 vis_HO3D_test.py
 vis_HO3D_v3.py
 compute_visibility_ho3d.py
+pred_for_gt_checking.py
 tmp
 *.json
 mano

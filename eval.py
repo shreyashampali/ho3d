@@ -390,7 +390,7 @@ if __name__ == '__main__':
                         help='Path to where the eval result should be.')
     parser.add_argument('--pred_file_name', type=str, default='pred.json',
                         help='Name of the eval file.')
-    parser.add_argument('--version', type=str,
+    parser.add_argument('--version', type=str, choices=['v2', 'v3'],
                         help='HO3D version', default='v2')
     args = parser.parse_args()
 

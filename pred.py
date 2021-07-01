@@ -85,8 +85,8 @@ if __name__ == '__main__':
                         help='Path to where the HO3D dataset is located.')
     parser.add_argument('--out', type=str, default='pred.json',
                         help='File to save the predictions.')
-    parser.add_argument('--version', type=str,
-                        help='File to save the predictions.')
+    parser.add_argument('--version', type=str, choices=['v2', 'v3'],
+                        help='version number')
     args = parser.parse_args()
 
     # call with a predictor function
