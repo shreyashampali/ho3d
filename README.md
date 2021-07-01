@@ -1,6 +1,6 @@
 # HO-3D - scripts
 
-<img src="teaser.png" width="60%">
+align:center"><img src="teaser.png" width="60%"></div>
 
 
 # :exclamation: :exclamation: :exclamation: New:exclamation: :exclamation: :exclamation:
