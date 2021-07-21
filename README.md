@@ -4,7 +4,7 @@
 
 
 # :exclamation: :exclamation: :exclamation: New:exclamation: :exclamation: :exclamation:
-We have now released **version 3** of the HO-3D dataset (HO-3D_v3) with **more accurate hand-object poses**. See this [report](https://files.icg.tugraz.at/f/7295988360f14340a44b/?dl=1) and official
+We have now released **version 3** of the HO-3D dataset (HO-3D_v3) with **more accurate hand-object poses**. See this [report](https://arxiv.org/abs/2107.00887) and official
  [website](https://www.tugraz.at/institute/icg/research/team-lepetit/research-projects/hand-object-3d-pose-annotation/) for details and links.
  The annotation format and folder structure follows almost the same format as the previous version (HO-3D_v2) and hence replacing the old dataset with
  the new one should work just fine. The only change being all the rgb images are now in 'jpg' format instead of 'png' format due to storage constraints.
