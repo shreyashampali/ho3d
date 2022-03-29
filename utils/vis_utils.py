@@ -444,6 +444,16 @@ def read_RGB_img(base_dir, seq_name, file_id, split):
 
     return img
 
+def read_seg(base_dir, seq_name, file_id, split):
+    """Read the RGB image in dataset"""
+    img_filename = os.path.join(base_dir, split, seq_name, 'segr', file_id + '.png')
+
+    _assert_exist(img_filename)
+
+    img = cv2.imread(img_filename)
+
+    return img
+
 
 def read_depth_img(base_dir, seq_name, file_id, split):
     """Read the depth image in dataset and decode it"""
