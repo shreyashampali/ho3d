@@ -1,4 +1,4 @@
-# HO-3D - scripts
+# HO-3D/H<sub>2</sub>O-3D - scripts
 
 <div style="text-align:center"><img src="teaser.png" width="90%"></div>
 
