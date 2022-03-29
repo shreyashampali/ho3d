@@ -8,7 +8,7 @@
     We have released version 1 of H<sub>2</sub>O-3D dataset which contains 2 hands and an object interaction.
     The annotations are obtained using the [HOnnotate](https://github.com/shreyashampali/HOnnotate) method similar to
     the HO-3D dataset and hence contains the annotations in the same format. The dataset can be downloaded
-    from [here](). This repo now also contains a script for visualizing H<sub>2</sub>O-3D dataset, `vis_H2O3D.py`
+    from [here](https://1drv.ms/u/s!AsG9HA3ULXQRgpAq-GOOV2jMYZFmkQ?e=AEEg13). This repo now also contains a script for visualizing H<sub>2</sub>O-3D dataset, `vis_H2O3D.py`
 - Update - Juy 1st, 2021
 
     We have now released **version 3** of the HO-3D dataset (HO-3D_v3) with **more accurate hand-object poses**. See this [report](https://arxiv.org/abs/2107.00887) and official
