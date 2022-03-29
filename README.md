@@ -3,21 +3,33 @@
 <div style="text-align:center"><img src="teaser.png" width="60%"></div>
 
 
-# :exclamation: :exclamation: :exclamation: New:exclamation: :exclamation: :exclamation:
-We have now released **version 3** of the HO-3D dataset (HO-3D_v3) with **more accurate hand-object poses**. See this [report](https://arxiv.org/abs/2107.00887) and official
+- Update - Mar 29th, 2022
+    
+    We have released version 1 of H<sub>2</sub>O-3D dataset which contains 2 hands and an object interaction.
+    The annotations are obtained using the [HOnnotate](https://github.com/shreyashampali/HOnnotate) method similar to
+    the HO-3D dataset and hence contains the annotations in the same format. The dataset can be downloaded
+    from [here](). This repo now also contains a script for visualizing H<sub>2</sub>O-3D dataset, `vis_H2O3D.py`
+- Update - Juy 1st, 2021
+
+    We have now released **version 3** of the HO-3D dataset (HO-3D_v3) with **more accurate hand-object poses**. See this [report](https://arxiv.org/abs/2107.00887) and official
  [website](https://www.tugraz.at/institute/icg/research/team-lepetit/research-projects/hand-object-3d-pose-annotation/) for details and links.
  The annotation format and folder structure follows almost the same format as the previous version (HO-3D_v2) and hence replacing the old dataset with
  the new one should work just fine. The only change being all the rgb images are now in 'jpg' format instead of 'png' format due to storage constraints.
  
- A new codalab challenge for **version 3** has been created [here](https://competitions.codalab.org/competitions/33267). Submission to this new challenge follows the exact same format as for
-  [version 2](https://competitions.codalab.org/competitions/22485). The codalab challenge for [HO-3D_v2](https://competitions.codalab.org/competitions/22485) will **close** on Dec. 1, 2021
+    A new codalab challenge for **version 3** has been created [here](https://competitions.codalab.org/competitions/33267). Submission to this new challenge follows the exact same format as for
+  [version 2](https://competitions.codalab.org/competitions/22485).
  <hr />
  
 
-
-HO-3D is a dataset with 3D pose annotations for hand and object under severe occlusions from each other. The sequences in the dataset contain different
-persons manipulating different objects, which are taken from [YCB dataset](https://rse-lab.cs.washington.edu/projects/posecnn/). Details about the 
-proposed annotation method can be found in our [paper](https://arxiv.org/pdf/1907.01481). The dataset (HO-3D_v3) contains 103,462 annotated images and their 
+# About this Repo
+HO-3D and H<sub>2</sub>O-3D are datasets with 3D pose annotations for hands and object under severe occlusions from each other. 
+The HO-3D dataset contains sequences of right hand interacting with an object and was released as part of the
+CVPR'20 paper, [HOnnotate](https://arxiv.org/pdf/1907.01481). The H<sub>2</sub>O-3D dataset contains sequences of
+ two hands interacting with an object and was released as part of the CVPR'22 paper, [Keypoint Transformer]().
+ 
+ The sequences in the dataset contain different persons manipulating different objects, which are taken from [YCB dataset](https://rse-lab.cs.washington.edu/projects/posecnn/). Details about the 
+proposed annotation method can be found in our [paper](https://arxiv.org/pdf/1907.01481). The HO-3D (version 3) dataset contains 103,462 annotated images and their 
+corresponding depth maps. The H<sub>2</sub>O-3D (version 1) dataset contains 76,340 annotated images and their 
 corresponding depth maps.
 
 For more details about the dataset and the corresponding work, visit our [project page](https://www.tugraz.at/index.php?id=40231)
@@ -27,7 +39,8 @@ An online codalab challenge which provides a platform to evaluate different hand
 
 This repository contains a collection of scripts for:
 * Visualization of HO-3D dataset
-* Evaluation scripts used in the challenge
+* Visualization of H<sub>2</sub>O-3D dataset
+* Evaluation scripts used in the challenges
 
 
 # Basic setup
@@ -57,7 +70,11 @@ This should enable you to run the following to show some dataset samples.
     ```
     python vis_HO3D.py ${DB_PATH} ${YCB_PATH}
     python vis_HO3D.py ${DB_PATH} ${YCB_PATH} -split 'evaluation'
-    python vis_HO3D.py ${DB_PATH} ${YCB_PATH} -visType 'open3d' 
+    python vis_HO3D.py ${DB_PATH} ${YCB_PATH} -visType 'open3d'
+    
+    python vis_H2O3D.py ${DB_PATH} ${YCB_PATH}
+    python vis_H2O3D.py ${DB_PATH} ${YCB_PATH} -split 'evaluation'
+    python vis_H2O3D.py ${DB_PATH} ${YCB_PATH} -visType 'open3d'  
     ```
     
 The script provides parameters to visualize the annotations in 3D using open3d or in 2D in matplotlib window. Use `-visType` to set the visualization type.
@@ -99,7 +116,7 @@ during the submission.
 
 6. The calculation of the evaluation metrics can be found in `eval.py`
 
-# Visualize Point Cloud from All the Cameras (only in version 3)
+# Visualize Point Cloud from All the Cameras (only in HO-3D version 3)
 
 We provide the extrinsic camera parameters in 'calibration' folder of the dataset. The RGB-D data from all the cameras 
 for multi-camera sequences can be combined to visualize the point-cloud using the below script:
@@ -108,7 +125,7 @@ for multi-camera sequences can be combined to visualize the point-cloud using th
 ```
 `SEQ` and `FID` are the sequence name and file name. Try `-h` for list of accepted sequence names.
 
-# Compare with Manual Annotations (only in version 3)
+# Compare with Manual Annotations (only in HO-3D version 3)
 
 We manually annotated 5 finger tip locations in 53 frames using the point-cloud from all the cameras. The manually annotated
  finger tip locations are provided in 'manual_annotations' folder of the dataset. We measure the accuracy of our automatic 
@@ -123,7 +140,7 @@ python compare_manual_anno.py ${DB_PATH}
 The download and use of the dataset is for academic research only and it is free to researchers from educational or research institutes
 for non-commercial purposes. When downloading the dataset you agree to (unless with expressed permission of the authors): 
 not redistribute, modificate, or commercial usage of this dataset in any way or form, either partially or entirely. 
-If using this dataset, please cite the corresponding paper.
+If using one of these dataset, please cite the corresponding paper.
 
     
 	@INPROCEEDINGS{hampali2020honnotate,
@@ -131,6 +148,13 @@ If using this dataset, please cite the corresponding paper.
               author={Shreyas Hampali and Mahdi Rad and Markus Oberweger and Vincent Lepetit},
               booktitle = {CVPR},
 	      year = {2020}
+             }
+             
+    @INPROCEEDINGS{hampali2022keypointtransformer,
+    	      title={Keypoint Transformer: Solving Joint Identification in Challenging Hands and Object Interactions for Accurate 3D Pose Estimation},
+              author={Shreyas Hampali and Sayan Deb Sarkar and Mahdi Rad and Vincent Lepetit},
+              booktitle = {CVPR},
+	      year = {2022}
              }
     
 # Acknowledgments
