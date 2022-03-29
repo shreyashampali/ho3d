@@ -1,6 +1,6 @@
 # HO-3D - scripts
 
-<div style="text-align:center"><img src="teaser.png" width="60%"></div>
+<div style="text-align:center"><img src="teaser.png" width="90%"></div>
 
 
 - Update - Mar 29th, 2022
