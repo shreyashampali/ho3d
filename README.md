@@ -16,8 +16,8 @@
  The annotation format and folder structure follows almost the same format as the previous version (HO-3D_v2) and hence replacing the old dataset with
  the new one should work just fine. The only change being all the rgb images are now in 'jpg' format instead of 'png' format due to storage constraints.
  
-    A new codalab challenge for **version 3** has been created [here](https://competitions.codalab.org/competitions/33267). Submission to this new challenge follows the exact same format as for
-  [version 2](https://competitions.codalab.org/competitions/22485).
+    A new codalab challenge for **version 3** has been created [here](https://codalab.lisn.upsaclay.fr/competitions/4393). Submission to this new challenge follows the exact same format as for
+  [version 2](https://codalab.lisn.upsaclay.fr/competitions/4318).
  <hr />
  
 
@@ -35,7 +35,9 @@ corresponding depth maps.
 For more details about the dataset and the corresponding work, visit our [project page](https://www.tugraz.at/index.php?id=40231)
 
 An online codalab challenge which provides a platform to evaluate different hand pose estimation methods on our dataset with standard metrics is launched 
-[here](https://competitions.codalab.org/competitions/22485) (for version 2) and [here](https://competitions.codalab.org/competitions/33267) (for version 3)
+[here](https://codalab.lisn.upsaclay.fr/competitions/4318) (for version 2) and [here](https://codalab.lisn.upsaclay.fr/competitions/4393) (for version 3)
+![image](https://user-images.githubusercontent.com/19649112/165757439-1edc31db-2ca7-4b1b-a27a-cec70bcfc6f5.png)
+
 
 This repository contains a collection of scripts for:
 * Visualization of HO-3D dataset
