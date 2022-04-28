@@ -36,13 +36,17 @@ For more details about the dataset and the corresponding work, visit our [projec
 
 An online codalab challenge which provides a platform to evaluate different hand pose estimation methods on our dataset with standard metrics is launched 
 [here](https://codalab.lisn.upsaclay.fr/competitions/4318) (for version 2) and [here](https://codalab.lisn.upsaclay.fr/competitions/4393) (for version 3)
-![image](https://user-images.githubusercontent.com/19649112/165757439-1edc31db-2ca7-4b1b-a27a-cec70bcfc6f5.png)
+
 
 
 This repository contains a collection of scripts for:
 * Visualization of HO-3D dataset
 * Visualization of H<sub>2</sub>O-3D dataset
 * Evaluation scripts used in the challenges
+
+# Comparison with SOTA methods on HO-3D dataset
+![image](https://user-images.githubusercontent.com/19649112/165757439-1edc31db-2ca7-4b1b-a27a-cec70bcfc6f5.png)
+![image](https://user-images.githubusercontent.com/19649112/165757566-7cd96ff2-d2d9-44fe-8b29-2f4ec0cb022e.png)
 
 
 # Basic setup
