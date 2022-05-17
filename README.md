@@ -102,8 +102,8 @@ of the dataset ('v2' or 'v3')
     zip -j pred.zip pred.json
     ```
     
-3. Upload `pred.zip` to our Codalab competition ([version 2](https://competitions.codalab.org/competitions/2dsd)
- or [version3](https://competitions.codalab.org/competitions/33267))website (Participate -> Submit)
+3. Upload `pred.zip` to our Codalab competition ([version 2](https://codalab.lisn.upsaclay.fr/competitions/4318)
+ or [version3](https://codalab.lisn.upsaclay.fr/competitions/4393))website (Participate -> Submit)
 
 4. Wait for the evaluation server to report back your results and publish your results to the leaderboard. The zero predictor will give you the following results
     ```
