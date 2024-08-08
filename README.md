@@ -2,6 +2,9 @@
 
 <div style="text-align:center"><img src="teaser.png" width="90%"></div>
 
+**HO-3D v2 download link**: [https://files.icg.tugraz.at/d/5224b9b16422474892d7/?](https://files.icg.tugraz.at/d/5224b9b16422474892d7/?)
+**HO-3D v3 download link**: [https://1drv.ms/f/s!AsG9HA3ULXQRlFy5tCZXahAe3bEV?e=BevrKO](https://1drv.ms/f/s!AsG9HA3ULXQRlFy5tCZXahAe3bEV?e=BevrKO)
+**H<sub>2</sub>O-3D v1 download link**: [https://onedrive.live.com/?authkey=%21APhjjldozGGRZpE&id=11742DD40D1CBDC1%2134858&cid=11742DD40D1CBDC1](https://onedrive.live.com/?authkey=%21APhjjldozGGRZpE&id=11742DD40D1CBDC1%2134858&cid=11742DD40D1CBDC1)
 
 - Update - Mar 29th, 2022
     
