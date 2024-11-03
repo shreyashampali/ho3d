@@ -6,6 +6,15 @@
 **HO-3D v3 download link**: [https://1drv.ms/f/s!AsG9HA3ULXQRlFy5tCZXahAe3bEV?e=BevrKO](https://1drv.ms/f/s!AsG9HA3ULXQRlFy5tCZXahAe3bEV?e=BevrKO)\
 **H<sub>2</sub>O-3D v1 download link**: [https://onedrive.live.com/?authkey=%21APhjjldozGGRZpE&id=11742DD40D1CBDC1%2134858&cid=11742DD40D1CBDC1](https://onedrive.live.com/?authkey=%21APhjjldozGGRZpE&id=11742DD40D1CBDC1%2134858&cid=11742DD40D1CBDC1)
 
+- Update - Nov 3rd, 2024
+
+    We have now released the ground-truth annotations for HO-3D v2 and v3 datasets.
+    
+    | Dataset    | GT download link | Command for running eval locally |
+    | -------- | :-------: |------|
+    | HO-3D v2 | [link]()    | `python3 eval.py <input_dir_with_pred_and_gt> <output_dir_for_results> --version v2` |
+    | HO-3D v3 | [link](https://1drv.ms/f/c/11742dd40d1cbdc1/EqzdBm7UDWVCmdxCyP373eQBhia924vXa4i85WqvWNLHYg?e=k6kshD)     | `python3 eval.py <input_dir_with_pred_and_gt> <output_dir_for_results> --version v3` |
+    
 - Update - Mar 29th, 2022
     
     We have released version 1 of H<sub>2</sub>O-3D dataset which contains 2 hands and an object interaction.
