@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 import pip
 import argparse
+import base64
 import json
 
 def install(package):
@@ -15,45 +16,19 @@ def install(package):
         pipmain(['install', package])
 
 try:
-    import open3d as o3d
-except:
-    install('open3d-python')
-    import open3d as o3d
-
-try:
     from scipy.linalg import orthogonal_procrustes
 except:
     install('scipy')
     from scipy.linalg import orthogonal_procrustes
 
 
-try:
-    from utils.vis_utils import *
-    from utils.eval_util import EvalUtil
-
-except:
-    from fh_utils import *
-    from eval_util import EvalUtil
-
-
-def verts2pcd(verts, color=None):
-    pcd = o3d.PointCloud()
-    pcd.points = o3d.Vector3dVector(verts)
-    if color is not None:
-        if color == 'r':
-            pcd.paint_uniform_color([1, 0.0, 0])
-        if color == 'g':
-            pcd.paint_uniform_color([0, 1.0, 0])
-        if color == 'b':
-            pcd.paint_uniform_color([0, 0, 1.0])
-    return pcd
+from utils.fh_utils import *
+from utils.eval_util import EvalUtil
 
 
 def calculate_fscore(gt, pr, th=0.01):
-    gt = verts2pcd(gt)
-    pr = verts2pcd(pr)
-    d1 = o3d.compute_point_cloud_to_point_cloud_distance(gt, pr) # closest dist for each gt point
-    d2 = o3d.compute_point_cloud_to_point_cloud_distance(pr, gt) # closest dist for each pred point
+    d1 = np.min(np.linalg.norm(np.expand_dims(gt, axis=-2) - np.expand_dims(pr, axis=-3),axis=-1),axis=-1)
+    d2 = np.min(np.linalg.norm(np.expand_dims(pr, axis=-2) - np.expand_dims(gt, axis=-3),axis=-1),axis=-1)
     if len(d1) and len(d2):
         recall = float(sum(d < th for d in d2)) / float(len(d2))  # how many of our predicted points lie close to a gt point?
         precision = float(sum(d < th for d in d1)) / float(len(d1))  # how many of gt points are matched?
@@ -146,7 +121,7 @@ def createHTML(outputDir, curve_list):
         plt.savefig(img_path, bbox_inches=0, dpi=300)
 
         # write image and create html embedding
-        data_uri1 = open(img_path, 'rb').read().encode('base64').replace('\n', '')
+        data_uri1 = base64.b64encode(open(img_path, 'rb').read()).replace(b'\n', b'')
         img_tag1 = 'src="data:image/png;base64,{0}"'.format(data_uri1)
         curve_data_list.append((item.text, img_tag1))
 
@@ -164,10 +139,10 @@ def createHTML(outputDir, curve_list):
         <img border="0" %s alt="FROC" width="576pt" height="432pt">
         </p>
         <p>Raw curve data:</p>
-        
+
         <p>x_axis: <small>%s</small></p>
         <p>y_axis: <small>%s</small></p>
-        
+
         ''' % (text, img_embed, curve_list[i].x_data, curve_list[i].y_data)
 
     htmlString += '''
@@ -220,6 +195,7 @@ def main(gt_path, pred_path, output_dir, version, pred_file_name=None, set_name=
     assert len(pred[0]) == len(xyz_list), 'Expected format mismatch.'
     assert len(pred[1]) == len(xyz_list), 'Expected format mismatch.'
     assert len(pred[0]) == db_size(set_name, version=version)
+
 
     # init eval utils
     eval_xyz, eval_xyz_procrustes_aligned, eval_xyz_sc_tr_aligned = EvalUtil(), EvalUtil(), EvalUtil()
@@ -302,8 +278,10 @@ def main(gt_path, pred_path, output_dir, version, pred_file_name=None, set_name=
         for t in f_threshs:
             # for each threshold calculate the f score and the f score of the aligned vertices
             f, _, _ = calculate_fscore(verts, verts_pred, t)
+            # f = 0.
             l.append(f)
             f, _, _ = calculate_fscore(verts, verts_pred_aligned, t)
+            # f = 0.
             la.append(f)
         f_score.append(l)
         f_score_aligned.append(la)
@@ -325,11 +303,11 @@ def main(gt_path, pred_path, output_dir, version, pred_file_name=None, set_name=
     if shape_is_mano:
         mesh_mean3d, _, mesh_auc3d, pck_mesh, thresh_mesh = eval_mesh_err.get_measures(0.0, 0.05, 100)
         print('Evaluation 3D MESH results:')
-        print('auc=%.3f, mean_vert3d_avg=%.2f cm' % (mesh_auc3d, mesh_mean3d * 100.0))
+        print('auc=%.3f, mean_kp3d_avg=%.2f cm' % (mesh_auc3d, mesh_mean3d * 100.0))
 
         mesh_al_mean3d, _, mesh_al_auc3d, pck_mesh_al, thresh_mesh_al = eval_mesh_err_aligned.get_measures(0.0, 0.05, 100)
         print('Evaluation 3D MESH ALIGNED results:')
-        print('auc=%.3f, mean_vert3d_avg=%.2f cm\n' % (mesh_al_auc3d, mesh_al_mean3d * 100.0))
+        print('auc=%.3f, mean_kp3d_avg=%.2f cm\n' % (mesh_al_auc3d, mesh_al_mean3d * 100.0))
     else:
         mesh_mean3d, mesh_auc3d, mesh_al_mean3d, mesh_al_auc3d = -1.0, -1.0, -1.0, -1.0
 
@@ -393,13 +371,13 @@ if __name__ == '__main__':
     parser.add_argument('--version', type=str, choices=['v2', 'v3'],
                         help='HO3D version', default='v2')
     args = parser.parse_args()
-
+    
     # call eval
     main(
-        gt_path=os.path.join(args.input_dir, 'ref'),
-        pred_path=os.path.join(args.input_dir, 'res'),
-        output_dir=args.output_dir,
+        os.path.join(args.input_dir),
+        os.path.join(args.input_dir),
+        args.output_dir,
         pred_file_name=args.pred_file_name,
+        version=args.version,
         set_name='evaluation',
-        version=args.version
     )
