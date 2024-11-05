@@ -12,7 +12,7 @@
     
     | Dataset    | GT download link | Command for running eval locally |
     | -------- | :-------: |------|
-    | HO-3D v2 | [link]()    | `python3 eval.py <input_dir_with_pred_and_gt> <output_dir_for_results> --version v2` |
+    | HO-3D v2 | [link](https://1drv.ms/f/c/11742dd40d1cbdc1/EjSh5wMqNilPoQKA0nQF2NMBl0rfyg1gZQCo0k3iXv8vig)    | `python3 eval.py <input_dir_with_pred_and_gt> <output_dir_for_results> --version v2` |
     | HO-3D v3 | [link](https://1drv.ms/f/c/11742dd40d1cbdc1/EqzdBm7UDWVCmdxCyP373eQBhia924vXa4i85WqvWNLHYg?e=k6kshD)     | `python3 eval.py <input_dir_with_pred_and_gt> <output_dir_for_results> --version v3` |
     
 - Update - Mar 29th, 2022
